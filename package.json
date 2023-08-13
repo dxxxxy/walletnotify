@@ -1,0 +1,11 @@
+{
+    "name": "walletnotify",
+    "version": "1.0.0",
+    "description": "TODO: add description",
+    "author": "dxxxxy",
+    "type": "module",
+    "license": "GPL-3.0",
+    "scripts": {
+        "start": "tsc && node dist/app.js"
+    }
+}
