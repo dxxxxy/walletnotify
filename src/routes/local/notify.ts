@@ -4,6 +4,9 @@ import { client } from "../../app.js"
 import Webhook from "../../model/Webhook.js"
 
 export default (req: any, res: Response) => {
+    //only accept local connections
+    if (req.connection.localAddress !== req.connection.remoteAddress) res.status(403)
+
     //get txid from walletnotify
     const txid = req.params.txid
 
