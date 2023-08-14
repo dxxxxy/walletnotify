@@ -23,9 +23,9 @@ export default async(req: any, res: Response) => {
         Address: address,
         Callback: callback,
         Secret: secret
-    }).save().then(() => {
-        //send back secret so client can verify webhooks
-        res.status(200).json({ secret })
+    }).save().then(webhook => {
+        //send back secret so client can verify webhooks and id to track
+        res.status(200).json({ id: webhook.id, secret })
     }).catch(err => {
         console.error(err)
         res.status(500)
