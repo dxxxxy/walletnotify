@@ -40,3 +40,7 @@ app.post("/api/v1/subscribe", auth, (req, res) => subscribe(req, res))
 //create server
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`Server listening on port ${port}`))
+
+//no exit
+process.on("uncaughtException", (error) => console.log(error))
+process.on("unhandledRejection", (error) => console.log(error))
