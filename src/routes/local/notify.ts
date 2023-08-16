@@ -25,7 +25,7 @@ export default (req: any, res: Response) => {
 
             //send webhooks
             webhooks.forEach(webhook => {
-                const body = JSON.stringify(tx)
+                const body = JSON.stringify({ tx, address: webhook.Address })
 
                 const signature = crypto.createHmac("sha256", webhook.Secret).update(body).digest("hex")
 
