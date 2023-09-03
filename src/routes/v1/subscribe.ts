@@ -13,7 +13,7 @@ export default async(req: any, res: Response) => {
     if (!callback) return res.status(400).send("No callback provided")
 
     //import address into wallet for walletnotify
-    await client.importaddress({ address })
+    await client.importaddress({ address, rescan: false })
 
     //create secret for hmac
     const secret = crypto.randomBytes(64).toString("hex")
