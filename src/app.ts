@@ -20,7 +20,7 @@ mongoose.connection.on("disconnected", () => console.log("Mongoose connection di
 export const client = new RPCClient({
     url: process.env.RPC_URL,
     port: +process.env.RPC_PORT,
-    timeout: +process.env.RPC_TIMEOUT || 10000,
+    timeout: +process.env.RPC_TIMEOUT || 30000,
     user: process.env.RPC_USER,
     pass: process.env.RPC_PASS
 });
