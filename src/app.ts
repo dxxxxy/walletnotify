@@ -3,6 +3,7 @@ import helmet from "helmet"
 import mongoose from "mongoose"
 import { RPCClient } from "rpc-bitcoin"
 import auth from "./middleware/auth.js"
+import local from "./middleware/local.js"
 import notify from "./routes/local/notify.js"
 import subscribe from "./routes/v1/subscribe.js"
 
@@ -10,8 +11,7 @@ import subscribe from "./routes/v1/subscribe.js"
 (await import("dotenv")).config()
 
 //connect to database
-//noinspection JSIgnoredPromiseFromCall`
-mongoose.connect(process.env.MONGO_URL)
+await mongoose.connect(process.env.MONGO_URL)
 mongoose.connection.on("connected", () => console.log("Mongoose connection successfully opened!"))
 mongoose.connection.on("err", err => console.error(`Mongoose connection error:\n${err.stack}`))
 mongoose.connection.on("disconnected", () => console.log("Mongoose connection disconnected"))
@@ -27,15 +27,15 @@ export const client = new RPCClient({
 
 const app = express()
 
-app.use(express.json())
 app.use(helmet())
+app.use(express.json())
 
 //nginx ip forwarding
 app.set("trust proxy", true)
 
 //routes
-app.get("/notify/:txid", (req, res) => notify(req, res))
-app.post("/api/v1/subscribe", auth, (req, res) => subscribe(req, res))
+app.get("/notify/:txid", local, notify)
+app.post("/api/v1/subscribe", auth, subscribe)
 
 //create server
 const port = process.env.PORT || 3000
