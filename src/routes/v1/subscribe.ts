@@ -1,9 +1,9 @@
 import crypto from "crypto"
-import { Response } from "express"
+import { Request, Response } from "express"
 import { client } from "../../app.js"
 import Webhook from "../../model/Webhook.js"
 
-export default async(req: any, res: Response) => {
+export default async(req: Request, res: Response) => {
     //get address
     const address: string = req.body.address
     if (!address) return res.status(400).send("No address provided")
@@ -13,7 +13,10 @@ export default async(req: any, res: Response) => {
     if (!callback) return res.status(400).send("No callback provided")
 
     //import address into wallet for walletnotify
-    await client.importaddress({ address, rescan: false })
+    await client.importaddress({ address, rescan: false }).catch(err => {
+        console.error(err)
+        res.status(500)
+    })
 
     //create secret for hmac
     const secret = crypto.randomBytes(64).toString("hex")

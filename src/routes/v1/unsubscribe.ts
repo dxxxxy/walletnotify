@@ -1,19 +1,16 @@
-import { Response } from "express"
+import { Request, Response } from "express"
 import Webhook from "../../model/Webhook.js"
 
-export default (req: any, res: Response) => {
+export default (req: Request, res: Response) => {
     //get webhook id
     const id = req.params.id
     if (!id) return res.status(400).send("No id provided")
 
     //delete webhook from database
-    Webhook.findByIdAndDelete(id, (err: any) => {
-        if (err) {
-            console.error(err)
-            return res.status(500)
-        }
-
-        //send back 200
-        res.status(200)
+    Webhook.findByIdAndDelete(id).then(() => {
+        res.status(200).send("Webhook deleted")
+    }).catch(err => {
+        console.error(err)
+        res.status(500)
     })
 }
